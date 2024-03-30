@@ -16,13 +16,30 @@ public class ArrayStorage {
         size = 0;
     }
 
-    public void save(Resume resume) {
-        if (size < storage.length) {
-            storage[size] = resume;
-            size++;
-        } else {
-            System.out.println("There is no more place to store your resume");
+    public void update(Resume resume) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(resume.getUuid())) {
+                storage[i] = resume;
+                return;
+            }
         }
+        System.out.println("This resume was not found");
+    }
+
+    public void save(Resume resume) {
+        if (size >= storage.length) {
+            System.out.println("This resume is already available");
+            return;
+        }
+
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(resume.getUuid())) {
+                System.out.println("This resume is already available");
+                return;
+            }
+        }
+        storage[size] = resume;
+        size++;
     }
 
     public Resume get(String uuid) {
@@ -36,13 +53,18 @@ public class ArrayStorage {
     }
 
     public void delete(String uuid) {
+        boolean isFind = false;
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 size--;
                 storage[i] = storage[size];
                 storage[size] = null;
+                isFind = true;
                 break;
             }
+        }
+        if (!isFind) {
+            System.out.println("The specified resume could not be found");
         }
     }
 
