@@ -8,7 +8,8 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private static final int STORAGE_LIMIT = 10000;
+    private Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size = 0;
 
     public void clear() {
@@ -17,46 +18,46 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        if (!isResumeExists(resume.getUuid())) {
+        int index = findIndex(resume.getUuid());
+        if ((isExisting(resume.getUuid(), index))) {
+            storage[index] = resume;
+        } else {
             System.out.println("The specified resume could not be found");
-            return;
         }
-
-        storage[indexStorage(resume.getUuid())] = resume;
     }
 
     public void save(Resume resume) {
         if (size >= storage.length) {
             System.out.println("The resume storage is full");
             return;
-        }
-
-        if (isResumeExists(resume.getUuid())) {
+        } else if (isExisting(resume.getUuid(), findIndex(resume.getUuid()))) {
             System.out.println("This resume is already available");
             return;
+        } else {
+            storage[size] = resume;
+            size++;
         }
-        storage[size] = resume;
-        size++;
     }
 
     public Resume get(String uuid) {
-        if (!isResumeExists(uuid)) {
+        int index = findIndex(uuid);
+        if (isExisting(uuid, index)) {
+            return storage[index];
+        } else {
             System.out.println("The specified resume could not be found");
             return null;
         }
-
-        return storage[indexStorage(uuid)];
     }
 
     public void delete(String uuid) {
-        if (!isResumeExists(uuid)) {
+        int index = findIndex(uuid);
+        if (isExisting(uuid, index)) {
+            storage[index] = storage[size - 1];
+            storage[size - 1] = null;
+            size--;
+        } else {
             System.out.println("The specified resume could not be found");
-            return;
         }
-
-        storage[indexStorage(uuid)] = storage[size - 1];
-        storage[size - 1] = null;
-        size--;
     }
 
     /**
@@ -70,16 +71,14 @@ public class ArrayStorage {
         return size;
     }
 
-    private boolean isResumeExists(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                return true;
-            }
+    private boolean isExisting(String uuid, int index) {
+        if (storage[index].getUuid().equals(uuid)) {
+            return true;
         }
         return false;
     }
 
-    private int indexStorage(String uuid) {
+    private int findIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
