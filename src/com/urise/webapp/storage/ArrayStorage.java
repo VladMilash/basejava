@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public class ArrayStorage {
     private static final int STORAGE_LIMIT = 10000;
-    private Resume[] storage = new Resume[STORAGE_LIMIT];
+    private final Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size = 0;
 
     public void clear() {
@@ -19,7 +19,7 @@ public class ArrayStorage {
 
     public void update(Resume resume) {
         int index = findIndex(resume.getUuid());
-        if ((isExisting(resume.getUuid(), index))) {
+        if (isExisting(index)) {
             storage[index] = resume;
         } else {
             System.out.println("The specified resume could not be found");
@@ -29,10 +29,8 @@ public class ArrayStorage {
     public void save(Resume resume) {
         if (size >= storage.length) {
             System.out.println("The resume storage is full");
-            return;
-        } else if (isExisting(resume.getUuid(), findIndex(resume.getUuid()))) {
+        } else if (isExisting(findIndex(resume.getUuid()))) {
             System.out.println("This resume is already available");
-            return;
         } else {
             storage[size] = resume;
             size++;
@@ -41,7 +39,7 @@ public class ArrayStorage {
 
     public Resume get(String uuid) {
         int index = findIndex(uuid);
-        if (isExisting(uuid, index)) {
+        if (isExisting(index)) {
             return storage[index];
         } else {
             System.out.println("The specified resume could not be found");
@@ -51,7 +49,7 @@ public class ArrayStorage {
 
     public void delete(String uuid) {
         int index = findIndex(uuid);
-        if (isExisting(uuid, index)) {
+        if (isExisting(index)) {
             storage[index] = storage[size - 1];
             storage[size - 1] = null;
             size--;
@@ -71,8 +69,8 @@ public class ArrayStorage {
         return size;
     }
 
-    private boolean isExisting(String uuid, int index) {
-        if (storage[index].getUuid().equals(uuid)) {
+    private boolean isExisting(int index) {
+        if (index >= 0) {
             return true;
         }
         return false;
