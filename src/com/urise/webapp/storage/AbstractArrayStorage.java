@@ -36,7 +36,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(String uuid) {
         int index = findIndex(uuid);
         if (isExisting(index)) {
-            deleteElements(index);
+            deleteElement(index);
         } else {
             System.out.println("The specified resume could not be found");
         }
@@ -74,5 +74,5 @@ public abstract class AbstractArrayStorage implements Storage {
 
     protected abstract void saveElement(Resume resume);
 
-    protected abstract void deleteElements(int index);
+    protected abstract void deleteElement(int index);
 }
