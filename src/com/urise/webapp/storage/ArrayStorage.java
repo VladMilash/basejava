@@ -34,16 +34,6 @@ public class ArrayStorage extends AbstractArrayStorage {
         }
     }
 
-    public Resume get(String uuid) {
-        int index = findIndex(uuid);
-        if (isExisting(index)) {
-            return storage[index];
-        } else {
-            System.out.println("The specified resume could not be found");
-            return null;
-        }
-    }
-
     public void delete(String uuid) {
         int index = findIndex(uuid);
         if (isExisting(index)) {
@@ -62,14 +52,7 @@ public class ArrayStorage extends AbstractArrayStorage {
         return Arrays.copyOf(storage, size);
     }
 
-    private boolean isExisting(int index) {
-        if (index >= 0) {
-            return true;
-        }
-        return false;
-    }
-
-    private int findIndex(String uuid) {
+    protected int findIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;

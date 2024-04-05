@@ -10,4 +10,23 @@ public abstract class AbstractArrayStorage implements Storage {
     public int size() {
         return size;
     }
+
+    public Resume get(String uuid) {
+        int index = findIndex(uuid);
+        if (isExisting(index)) {
+            return storage[index];
+        } else {
+            System.out.println("The specified resume could not be found");
+            return null;
+        }
+    }
+
+    protected boolean isExisting(int index) {
+        if (index >= 0) {
+            return true;
+        }
+        return false;
+    }
+
+    protected abstract int findIndex(String uuid);
 }
