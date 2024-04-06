@@ -8,14 +8,13 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void saveElement(Resume resume) {
-        int insertionPoint = - (Arrays.binarySearch(storage, 0, size, resume)) - 1;
+        int insertionPoint = -(Arrays.binarySearch(storage, 0, size, resume)) - 1;
         storage[size] = resume;
         for (int i = size - 1; i >= insertionPoint; i--) {
-            storage[i+1] = storage[i];
+            storage[i + 1] = storage[i];
         }
         storage[insertionPoint] = resume;
-        size++;
-
+        incrementSize();
     }
 
     @Override
@@ -23,8 +22,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         for (int i = index; i <= size - 1; i++) {
             storage[i] = storage[i + 1];
         }
-        storage[size-1] = null;
-        size--;
+        clearElement(storage, size - 1);
     }
 
     protected int findIndex(String uuid) {
