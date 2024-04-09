@@ -22,7 +22,6 @@ public abstract class AbstractArrayStorage implements Storage {
         if (isExisting(index)) {
             storage[index] = resume;
         } else {
-            //System.out.println("The specified resume could not be found");
             throw new NotExistStorageException(resume.getUuid());
         }
     }
