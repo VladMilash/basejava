@@ -84,6 +84,8 @@ private static final String UUID_3 = "uuid3";
 
     @org.junit.Test
     public void getAll() {
+        Resume[] allResumes = storage.getAll();
+        Assert.assertEquals(storage.size(), allResumes.length);
     }
 
     @org.junit.Test
@@ -93,6 +95,7 @@ private static final String UUID_3 = "uuid3";
 
     @org.junit.Test
     public void get() {
+        Assert.assertEquals(storage.get(UUID_1), new Resume(UUID_1));
     }
 
     @org.junit.Test(expected = NotExistStorageException.class)
