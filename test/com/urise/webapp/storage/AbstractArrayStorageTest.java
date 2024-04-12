@@ -1,5 +1,6 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
@@ -41,32 +42,44 @@ private static final String UUID_3 = "uuid3";
 
     @org.junit.Test(expected = NotExistStorageException.class)
     public void updateNotExist() {
-        Resume Updateresume = new Resume("uuid5");
-        storage.update(Updateresume);
+        storage.update(new Resume("uuid5"));
     }
 
     @org.junit.Test
     public void save() {
-        Resume resume = new Resume("uuid_55");
+        Resume resume = new Resume("uuid55");
         storage.save(resume);
+        Assert.assertEquals(resume, storage.get("uuid55"));
     }
 
     @org.junit.Test(expected = StorageException.class)
     public void saveStorageOverflow() {
+        storage.clear();
+        try {
+            for (int i =0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
+                storage.save(new Resume());
+            }
+
+        } catch (StorageException e) {
+            Assert.fail("The overflow occurred ahead of time");
+        }
+        storage.save(new Resume());
     }
 
-//    public final void save(Resume resume) {
-//        if (size >= storage.length) {
-//            throw  new StorageException("Storage overflow", resume.getUuid());
-//        } else if (isExisting(findIndex(resume.getUuid()))) {
-//            throw new ExistStorageException(resume.getUuid());
-//        } else {
-//            saveElement(resume);
-//        }
-//    }
+    @org.junit.Test(expected = ExistStorageException.class)
+    public void saveExist() {
+       storage.save(new Resume("uuid2"));
+    }
 
-    @org.junit.Test
+    @org.junit.Test(expected = NotExistStorageException.class)
     public void delete() {
+        storage.delete("uuid1");
+        storage.get("uuid1");
+    }
+
+    @org.junit.Test(expected = NotExistStorageException.class)
+    public void deleteNotExist() {
+        storage.delete("uuid10");
     }
 
     @org.junit.Test
