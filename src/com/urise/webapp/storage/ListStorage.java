@@ -36,22 +36,32 @@ public class ListStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return null;
+        int index = findIndex(uuid);
+        if (isExisting(index)) {
+            return arrayList.get(index);
+        } else {
+            throw new NotExistStorageException(uuid);
+        }
     }
 
     @Override
     public void delete(String uuid) {
-
+        int index = findIndex(uuid);
+        if (isExisting(index)) {
+            arrayList.remove(index);
+        } else {
+            throw new NotExistStorageException(uuid);
+        }
     }
 
     @Override
     public Resume[] getAll() {
-        return new Resume[0];
+        return arrayList.toArray(Resume[]::new);
     }
 
     @Override
     public int size() {
-        return 0;
+        return arrayList.size();
     }
 
     private int findIndex(String uuid) {
