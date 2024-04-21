@@ -1,15 +1,22 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
+    public SortedArrayStorage() {
+        super(new Resume[STORAGE_LIMIT]);
+    }
+
     @Override
     protected void saveElement(Resume resume) {
         int insertionPoint = -(Arrays.binarySearch(storage, 0, size, resume)) - 1;
-        if (insertionPoint < size) {
+        if (size >= storage.length) {
+            throw new StorageException("Storage overflow", resume.getUuid());
+        } else if (insertionPoint < size) {
             System.arraycopy(storage, insertionPoint, storage, insertionPoint + 1, size - insertionPoint);
             storage[insertionPoint] = resume;
             incrementSize();
@@ -17,7 +24,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
             storage[insertionPoint] = resume;
             incrementSize();
         }
-
     }
 
     @Override

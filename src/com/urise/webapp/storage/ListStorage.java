@@ -1,57 +1,23 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
 
-public class ListStorage implements Storage {
+public class ListStorage extends AbstractStorage {
     protected static ArrayList<Resume> arrayList = new ArrayList<Resume>();
+
+    public ListStorage() {
+        super(arrayList);
+    }
 
     @Override
     public void clear() {
         arrayList.clear();
     }
 
-    @Override
-    public void update(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (isExisting(index)) {
-            arrayList.set(index,resume);
-        } else {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-    }
-
-    @Override
-    public void save(Resume resume) {
-        if (isExisting(findIndex(resume.getUuid()))) {
-            throw new ExistStorageException(resume.getUuid());
-        } else {
-            arrayList.add(resume);
-        }
-
-    }
-
-    @Override
-    public Resume get(String uuid) {
-        int index = findIndex(uuid);
-        if (isExisting(index)) {
-            return arrayList.get(index);
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
-    }
-
-    @Override
-    public void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (isExisting(index)) {
-            arrayList.remove(index);
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
+    public Resume getElement(int index) {
+        return arrayList.get(index);
     }
 
     @Override
@@ -64,17 +30,20 @@ public class ListStorage implements Storage {
         return arrayList.size();
     }
 
-    private int findIndex(String uuid) {
-        for (int i = 0; i < arrayList.size(); i++) {
-            if (arrayList.get(i).getUuid().equals(uuid)) {
-                return i;
-            }
-        }
-        return -1;
+    public int findIndex(String uuid) {
+        Resume searchResume = new Resume(uuid);
+        return arrayList.indexOf(searchResume);
     }
 
-    protected boolean isExisting(int index) {
-        return index >= 0;
+    public void saveElement(Resume resume) {
+        arrayList.add(resume);
     }
 
+    public void deleteElement(int index) {
+        arrayList.remove(index);
+    }
+
+    public void updateElement(Resume resume, int index) {
+        arrayList.set(index, resume);
+    }
 }

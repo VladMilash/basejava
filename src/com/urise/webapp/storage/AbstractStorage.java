@@ -1,40 +1,69 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
-public class AbstractStorage implements Storage {
-    @Override
-    public void clear() {
+import java.util.ArrayList;
 
+public abstract class AbstractStorage implements Storage {
+    protected Object storage;
+
+    public AbstractStorage(ArrayList storage) {
+        this.storage = storage;
     }
 
-    @Override
-    public void update(Resume resume) {
-
+    public AbstractStorage(Resume[] storage) {
+        this.storage = storage;
     }
 
-    @Override
-    public void save(Resume resume) {
-
+    public final void update(Resume resume) {
+        int index = findIndex(resume.getUuid());
+        if (isExisting(index)) {
+            updateElement(resume, index);
+        } else {
+            throw new NotExistStorageException(resume.getUuid());
+        }
     }
 
-    @Override
-    public Resume get(String uuid) {
-        return null;
+    public final void save(Resume resume) {
+        if (isExisting(findIndex(resume.getUuid()))) {
+            throw new ExistStorageException(resume.getUuid());
+        } else {
+            saveElement(resume);
+        }
     }
 
-    @Override
-    public void delete(String uuid) {
-
+    public final void delete(String uuid) {
+        int index = findIndex(uuid);
+        if (isExisting(index)) {
+            deleteElement(index);
+        } else {
+            throw new NotExistStorageException(uuid);
+        }
     }
 
-    @Override
-    public Resume[] getAll() {
-        return new Resume[0];
+    public final Resume get(String uuid) {
+        int index = findIndex(uuid);
+        if (isExisting(index)) {
+            return getElement(index);
+        } else {
+            throw new NotExistStorageException(uuid);
+        }
     }
 
-    @Override
-    public int size() {
-        return 0;
+    protected final boolean isExisting(int index) {
+        return index >= 0;
     }
+
+    protected abstract Resume getElement(int index);
+
+    protected abstract void saveElement(Resume resume);
+
+    protected abstract int findIndex(String uuid);
+
+    protected abstract void deleteElement(int index);
+
+    protected abstract void updateElement(Resume resume, int index);
+
 }
