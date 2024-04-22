@@ -7,10 +7,6 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
-    public SortedArrayStorage() {
-        super(new Resume[STORAGE_LIMIT]);
-    }
-
     @Override
     protected void saveElement(Resume resume) {
         int insertionPoint = -(Arrays.binarySearch(storage, 0, size, resume)) - 1;

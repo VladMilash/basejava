@@ -4,18 +4,8 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
-import java.util.ArrayList;
-
 public abstract class AbstractStorage implements Storage {
-    protected Object storage;
-
-    public AbstractStorage(ArrayList storage) {
-        this.storage = storage;
-    }
-
-    public AbstractStorage(Resume[] storage) {
-        this.storage = storage;
-    }
+    protected Object searchKey;
 
     public final void update(Resume resume) {
         int index = findIndex(resume.getUuid());

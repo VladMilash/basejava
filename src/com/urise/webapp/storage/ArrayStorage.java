@@ -8,10 +8,6 @@ import com.urise.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public ArrayStorage() {
-        super(new Resume[STORAGE_LIMIT]);
-    }
-
     @Override
     protected void saveElement(Resume resume) {
         if (size >= storage.length) {
