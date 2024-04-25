@@ -26,7 +26,7 @@ public abstract class AbstractStorage implements Storage {
         return getElement(getExistingSearchKey(resume));
     }
 
-    public Object getExistingSearchKey(Resume resume) {
+    private Object getExistingSearchKey(Resume resume) {
         Object searchKey = findIndex(resume.getUuid());
         if (isExisting(searchKey)) {
             return searchKey;
@@ -35,7 +35,7 @@ public abstract class AbstractStorage implements Storage {
         }
     }
 
-    public Object getNotExistingSearchKey(Resume resume) {
+    private Object getNotExistingSearchKey(Resume resume) {
         Object searchKey = findIndex(resume.getUuid());
         if (!isExisting(searchKey)) {
             return searchKey;
