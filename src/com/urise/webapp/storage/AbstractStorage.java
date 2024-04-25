@@ -5,55 +5,55 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
-    protected Object searchKey;
 
     public final void update(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (isExisting(index)) {
-            updateElement(resume, index);
+        Object searchKey = getExistingSearchKey(resume);
+        updateElement(resume, searchKey);
+    }
+
+    public final void save(Resume resume) {
+        getNotExistingSearchKey(resume);
+        saveElement(resume);
+    }
+
+    public final void delete(String uuid) {
+        Resume resume = new Resume(uuid);
+        deleteElement(getExistingSearchKey(resume));
+    }
+
+    public final Resume get(String uuid) {
+        Resume resume = new Resume(uuid);
+        return getElement(getExistingSearchKey(resume));
+    }
+
+    public Object getExistingSearchKey(Resume resume) {
+        Object searchKey = findIndex(resume.getUuid());
+        if (isExisting(searchKey)) {
+            return searchKey;
         } else {
             throw new NotExistStorageException(resume.getUuid());
         }
     }
 
-    public final void save(Resume resume) {
-        if (isExisting(findIndex(resume.getUuid()))) {
+    public Object getNotExistingSearchKey(Resume resume) {
+        Object searchKey = findIndex(resume.getUuid());
+        if (!isExisting(searchKey)) {
+            return searchKey;
+        } else {
             throw new ExistStorageException(resume.getUuid());
-        } else {
-            saveElement(resume);
         }
     }
 
-    public final void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (isExisting(index)) {
-            deleteElement(index);
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
-    }
+    protected abstract boolean isExisting(Object searchKey);
 
-    public final Resume get(String uuid) {
-        int index = findIndex(uuid);
-        if (isExisting(index)) {
-            return getElement(index);
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
-    }
-
-    protected final boolean isExisting(int index) {
-        return index >= 0;
-    }
-
-    protected abstract Resume getElement(int index);
+    protected abstract Resume getElement(Object searchKey);
 
     protected abstract void saveElement(Resume resume);
 
     protected abstract int findIndex(String uuid);
 
-    protected abstract void deleteElement(int index);
+    protected abstract void deleteElement(Object searchKey);
 
-    protected abstract void updateElement(Resume resume, int index);
+    protected abstract void updateElement(Resume resume, Object searchKey);
 
 }

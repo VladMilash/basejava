@@ -14,9 +14,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
@@ -25,15 +22,18 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    public Resume getElement(int index) {
+    public Resume getElement(Object searchKey) {
+        int index = (int) searchKey;
         return storage[index];
+
     }
 
     protected void incrementSize() {
         size++;
     }
 
-    public void updateElement(Resume resume, int index) {
+    public void updateElement(Resume resume, Object searchKey) {
+        int index = (int) searchKey;
         storage[index] = resume;
     }
 
@@ -42,4 +42,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size--;
     }
 
+    protected boolean isExisting(Object searchKey) {
+        int index = (int) searchKey;
+        return index >= 0;
+    }
 }

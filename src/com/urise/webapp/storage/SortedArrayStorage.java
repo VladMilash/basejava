@@ -23,7 +23,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void deleteElement(int index) {
+    protected void deleteElement(Object searchKey) {
+        int index = (int) searchKey;
         if (index < size - 1) {
             System.arraycopy(storage, index + 1, storage, index, size - index - 1);
             clearElement(storage, size - 1);
@@ -33,8 +34,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     protected int findIndex(String uuid) {
-        Resume searchKey = new Resume(uuid);
-        return Arrays.binarySearch(storage, 0, size, searchKey);
+        Resume resume = new Resume(uuid);
+        return Arrays.binarySearch(storage, 0, size, resume);
     }
-
 }
