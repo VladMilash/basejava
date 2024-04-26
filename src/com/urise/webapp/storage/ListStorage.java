@@ -6,6 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
+
+    public boolean isExisting(Object searchKey) {
+        int index = (int) searchKey;
+        return index >= 0;
+    }
+
     protected static List<Resume> storage = new ArrayList<>();
 
     @Override
@@ -28,7 +34,7 @@ public class ListStorage extends AbstractStorage {
         return storage.size();
     }
 
-    public int findIndex(String uuid) {
+    public Object findIndex(String uuid) {
         Resume searchResume = new Resume(uuid);
         return storage.indexOf(searchResume);
     }
@@ -45,10 +51,5 @@ public class ListStorage extends AbstractStorage {
     public void updateElement(Resume resume, Object searchKey) {
         int index = (int) searchKey;
         storage.set(index, resume);
-    }
-
-    protected boolean isExisting(Object searchKey) {
-        int index = (int) searchKey;
-        return index >= 0;
     }
 }

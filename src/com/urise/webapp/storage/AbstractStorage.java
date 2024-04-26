@@ -50,7 +50,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void saveElement(Resume resume);
 
-    protected abstract int findIndex(String uuid);
+    protected abstract Object findIndex(String uuid);
 
     protected abstract void deleteElement(Object searchKey);
 
