@@ -39,7 +39,7 @@ public class ListStorage extends AbstractStorage {
         return storage.indexOf(searchResume);
     }
 
-    public void saveElement(Resume resume) {
+    public void saveElement(Resume resume, Object searchKey) {
         storage.add(resume);
     }
 

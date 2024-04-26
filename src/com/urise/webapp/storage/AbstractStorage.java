@@ -13,7 +13,7 @@ public abstract class AbstractStorage implements Storage {
 
     public final void save(Resume resume) {
         getNotExistingSearchKey(resume);
-        saveElement(resume);
+        saveElement(resume,getNotExistingSearchKey(resume));
     }
 
     public final void delete(String uuid) {
@@ -48,7 +48,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Resume getElement(Object searchKey);
 
-    protected abstract void saveElement(Resume resume);
+    protected abstract void saveElement(Resume resume, Object searchKey);
 
     protected abstract Object findIndex(String uuid);
 

@@ -8,8 +8,8 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveElement(Resume resume) {
-        int insertionPoint = -(Arrays.binarySearch(storage, 0, size, resume)) - 1;
+    protected void saveElement(Resume resume, Object searchKey) {
+        int insertionPoint = -(int) searchKey - 1;
         if (size >= storage.length) {
             throw new StorageException("Storage overflow", resume.getUuid());
         } else if (insertionPoint < size) {

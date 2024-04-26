@@ -9,7 +9,7 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveElement(Resume resume) {
+    protected void saveElement(Resume resume, Object searchKey) {
         if (size >= storage.length) {
             throw new StorageException("Storage overflow", resume.getUuid());
         }

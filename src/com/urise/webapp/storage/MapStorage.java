@@ -9,7 +9,7 @@ public class MapStorage extends AbstractStorage {
     protected HashMap<String, Resume> storage = new HashMap<>();
 
     public boolean isExisting(Object searchKey) {
-        return searchKey != null;
+       return  storage.containsKey(searchKey);
     }
 
     @Override
@@ -18,16 +18,13 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveElement(Resume resume) {
-        storage.put(resume.getUuid(), resume);
+    protected void saveElement(Resume resume, Object searchKey) {
+        storage.put((String)searchKey, resume);
     }
 
     @Override
     protected Object findIndex(String uuid) {
-        if (storage.containsKey(uuid)) {
-            return uuid;
-        }
-        return null;
+       return uuid;
     }
 
     @Override
@@ -47,7 +44,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return storage.values().toArray(new Resume[storage.size()]);
+        return storage.values().toArray(new Resume[0]);
     }
 
     @Override
