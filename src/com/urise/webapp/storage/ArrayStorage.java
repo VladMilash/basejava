@@ -24,7 +24,7 @@ public class ArrayStorage extends AbstractArrayStorage {
         clearElement(storage, size - 1);
     }
 
-    protected Object findIndex(String uuid) {
+    protected Object findSearchKey(String uuid, String fullName) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;

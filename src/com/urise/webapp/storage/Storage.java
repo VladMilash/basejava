@@ -9,9 +9,9 @@ public interface Storage {
 
     public void save(Resume resume);
 
-    public Resume get(String uuid);
+    public Resume get(String uuid, String fullName);
 
-    public void delete(String uuid);
+    public void delete(String uuid, String fullName);
 
     public Resume[] getAll();
 

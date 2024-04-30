@@ -10,7 +10,7 @@ public class MapStorage extends AbstractStorage {
     protected Map<String, Resume> storage = new HashMap<>();
 
     public boolean isExisting(Object searchKey) {
-       return  storage.containsKey(searchKey);
+        return storage.containsKey(searchKey);
     }
 
     @Override
@@ -20,12 +20,12 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void saveElement(Resume resume, Object searchKey) {
-        storage.put((String)searchKey, resume);
+        storage.put((String) searchKey, resume);
     }
 
     @Override
-    protected Object findIndex(String uuid) {
-       return uuid;
+    protected Object findSearchKey(String uuid, String fullName) {
+        return uuid;
     }
 
     @Override

@@ -11,13 +11,17 @@ public abstract class AbstractArrayStorageTest {
     private final Storage storage;
 
     private static final String UUID_1 = "uuid1";
-    private static final Resume RESUME_1 = new Resume(UUID_1);
+    private static final String NAME_1 = "name1";
+    private static final Resume RESUME_1 = new Resume(UUID_1, NAME_1);
     private static final String UUID_2 = "uuid2";
-    private static final Resume RESUME_2 = new Resume(UUID_2);
+    private static final String NAME_2 = "name2";
+    private static final Resume RESUME_2 = new Resume(UUID_2, NAME_2);
     private static final String UUID_3 = "uuid3";
-    private static final Resume RESUME_3 = new Resume(UUID_3);
+    private static final String NAME_3 = "name3";
+    private static final Resume RESUME_3 = new Resume(UUID_3, NAME_3);
     private static final String UUID_4 = "uuid4";
-    private static final Resume RESUME_4 = new Resume(UUID_4);
+    private static final String NAME_4 = "name4";
+    private static final Resume RESUME_4 = new Resume(UUID_4, NAME_4);
 
     protected AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
@@ -42,7 +46,7 @@ public abstract class AbstractArrayStorageTest {
     public void update() {
         Resume updated = RESUME_1;
         storage.update(updated);
-        Assert.assertSame(updated, storage.get(UUID_1));
+        Assert.assertSame(updated, storage.get(UUID_1, NAME_1));
     }
 
     @org.junit.Test(expected = NotExistStorageException.class)
@@ -79,13 +83,13 @@ public abstract class AbstractArrayStorageTest {
 
     @org.junit.Test()
     public void delete() {
-        storage.delete(UUID_1);
+        storage.delete(UUID_1, NAME_1);
         assertSize(2);
     }
 
     @org.junit.Test(expected = NotExistStorageException.class)
     public void deleteNotExist() {
-        storage.delete(UUID_4);
+        storage.delete(UUID_4, NAME_4);
     }
 
     @org.junit.Test
@@ -101,18 +105,18 @@ public abstract class AbstractArrayStorageTest {
 
     @org.junit.Test
     public void get() {
-        assertGet(storage.get(UUID_1));
-        assertGet(storage.get(UUID_2));
-        assertGet(storage.get(UUID_3));
+        assertGet(storage.get(UUID_1, NAME_1));
+        assertGet(storage.get(UUID_2, NAME_2));
+        assertGet(storage.get(UUID_3, NAME_3));
     }
 
     @org.junit.Test(expected = NotExistStorageException.class)
     public void getNotExist() {
-        storage.get(UUID_4);
+        storage.get(UUID_4, NAME_4);
     }
 
     private void assertGet(Resume resume) {
-        Assert.assertEquals(resume, storage.get(resume.getUuid()));
+        Assert.assertEquals(resume, storage.get(resume.getUuid(), resume.getFullName()));
     }
 
     private void assertSize(int size) {

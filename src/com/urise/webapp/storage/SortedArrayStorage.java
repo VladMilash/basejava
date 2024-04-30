@@ -33,8 +33,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         }
     }
 
-    protected Object findIndex(String uuid) {
-        Resume resume = new Resume(uuid);
+    protected Object findSearchKey(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
         return Arrays.binarySearch(storage, 0, size, resume);
     }
 }

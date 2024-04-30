@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
  */
 public class MainArray {
     private final static Storage ARRAY_STORAGE = new ArrayStorage();
+    private static String name = "name";
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -37,16 +38,16 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    r = new Resume("uuid");
+                    r = new Resume("uuid", "name");
                     ARRAY_STORAGE.save(r);
                     printAll();
                     break;
                 case "delete":
-                    ARRAY_STORAGE.delete(uuid);
+                    ARRAY_STORAGE.delete(uuid, name);
                     printAll();
                     break;
                 case "get":
-                    System.out.println(ARRAY_STORAGE.get(uuid));
+                    System.out.println(ARRAY_STORAGE.get(uuid, name));
                     break;
                 case "clear":
                     ARRAY_STORAGE.clear();
