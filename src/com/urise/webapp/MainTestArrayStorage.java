@@ -26,19 +26,19 @@ public class MainTestArrayStorage {
 
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy", "name7"));
 
-        printAll();
-        ARRAY_STORAGE.delete(r1.getUuid(), r1.getFullName());
-        printAll();
-        ARRAY_STORAGE.clear();
-        printAll();
+//        printAll();
+//        ARRAY_STORAGE.delete(r1.getUuid(), r1.getFullName());
+//        printAll();
+//        ARRAY_STORAGE.clear();
+//        printAll();
 
         System.out.println("Size: " + ARRAY_STORAGE.size());
     }
 
-    static void printAll() {
-        System.out.println("\nGet All");
-        for (Resume r : ARRAY_STORAGE.getAll()) {
-            System.out.println(r);
-        }
-    }
+//    static void printAll() {
+//        System.out.println("\nGet All");
+//        for (Resume r : ARRAY_STORAGE.getAll()) {
+//            System.out.println(r);
+//        }
+//    }
 }

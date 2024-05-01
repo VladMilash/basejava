@@ -2,7 +2,9 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
@@ -19,8 +21,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
+    public List<Resume> getAllSorted() {
+        Resume[] arrayResume = Arrays.copyOf(storage, size);
+        Arrays.sort(arrayResume, RESUME_COMPARATOR);
+        List<Resume> sortedListResume = new ArrayList<>(Arrays.asList(arrayResume));
+        return sortedListResume;
     }
 
     public int size() {

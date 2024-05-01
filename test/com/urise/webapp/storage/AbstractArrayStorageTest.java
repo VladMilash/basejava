@@ -6,6 +6,10 @@ import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractArrayStorageTest {
     private final Storage storage;
@@ -39,7 +43,8 @@ public abstract class AbstractArrayStorageTest {
     public void clear() {
         storage.clear();
         assertSize(0);
-        Assert.assertArrayEquals(new Resume[0], storage.getAll());
+        List<Resume> expectedEmptyList = new ArrayList<>();
+        Assert.assertEquals(expectedEmptyList, storage.getAllSorted());
     }
 
     @org.junit.Test
@@ -93,12 +98,6 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @org.junit.Test
-    public void getAll() {
-        Resume[] expected = {RESUME_1, RESUME_2, RESUME_3};
-        Assert.assertArrayEquals(expected, storage.getAll());
-    }
-
-    @org.junit.Test
     public void size() {
         assertSize(3);
     }
@@ -121,5 +120,14 @@ public abstract class AbstractArrayStorageTest {
 
     private void assertSize(int size) {
         Assert.assertEquals(size, storage.size());
+    }
+
+    @Test
+    public void getAllSorted() {
+        List<Resume> expected = new ArrayList<>();
+        expected.add(RESUME_1);
+        expected.add(RESUME_2);
+        expected.add(RESUME_3);
+        Assert.assertEquals(expected, storage.getAllSorted());
     }
 }
