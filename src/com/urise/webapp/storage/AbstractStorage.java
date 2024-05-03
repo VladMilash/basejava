@@ -8,7 +8,7 @@ import java.util.Comparator;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected static  final Comparator<Resume> RESUME_COMPARATOR =
+    protected static final Comparator<Resume> RESUME_COMPARATOR =
             Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
 
     public final void update(Resume resume) {
@@ -26,7 +26,7 @@ public abstract class AbstractStorage implements Storage {
         deleteElement(getExistingSearchKey(resume));
     }
 
-    public final Resume get(String uuid,String fullName) {
+    public final Resume get(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
         return getElement(getExistingSearchKey(resume));
     }

@@ -25,9 +25,9 @@ public class ListStorage extends AbstractStorage {
     }
 
     public List<Resume> getAllSorted() {
-       List<Resume> sortedListResume = new ArrayList<>(storage);
-       sortedListResume.sort(RESUME_COMPARATOR);
-       return sortedListResume;
+        List<Resume> sortedListResume = new ArrayList<>(storage);
+        sortedListResume.sort(RESUME_COMPARATOR);
+        return sortedListResume;
     }
 
     @Override

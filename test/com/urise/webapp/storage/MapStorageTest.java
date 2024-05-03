@@ -12,7 +12,8 @@ import java.util.List;
 
 public class MapStorageTest {
 
-    private MapStorage storage = new MapStorage();
+//    private MapStorage storage = new MapStorage();
+    private MapStorageResume storage = new MapStorageResume();
 
     private static final String UUID_1 = "uuid1";
     private static final String NAME_1 = "name1";
