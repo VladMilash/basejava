@@ -11,6 +11,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assume.assumeTrue;
+
 public abstract class AbstractArrayStorageTest {
     private final Storage storage;
 
@@ -69,16 +71,20 @@ public abstract class AbstractArrayStorageTest {
 
     @org.junit.Test(expected = StorageException.class)
     public void saveStorageOverflow() {
-        storage.clear();
-        try {
-            for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
-            }
+        if (storage instanceof AbstractArrayStorage) {
+            storage.clear();
+            try {
+                for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
+                    storage.save(new Resume());
+                }
 
-        } catch (StorageException e) {
-            Assert.fail("The overflow occurred ahead of time");
+            } catch (StorageException e) {
+                Assert.fail("The overflow occurred ahead of time");
+            }
+            storage.save(new Resume());
+        } else {
+            assumeTrue(false);
         }
-        storage.save(new Resume());
     }
 
     @org.junit.Test(expected = ExistStorageException.class)
