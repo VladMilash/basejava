@@ -21,11 +21,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    public List<Resume> getAllSorted() {
+    public List<Resume> getListResume() {
         Resume[] arrayResume = Arrays.copyOf(storage, size);
-        Arrays.sort(arrayResume, RESUME_COMPARATOR);
-        List<Resume> sortedListResume = new ArrayList<>(Arrays.asList(arrayResume));
-        return sortedListResume;
+        List<Resume> list = new ArrayList<>(Arrays.asList(arrayResume));
+        return list;
     }
 
     public int size() {

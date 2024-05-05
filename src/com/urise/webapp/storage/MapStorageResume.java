@@ -9,23 +9,22 @@ public class MapStorageResume extends AbstractStorage {
     protected Map<String, Resume> storage = new HashMap<>();
 
     public boolean isExisting(Object searchKey) {
-        return storage.containsKey(((Resume) searchKey).getUuid());
+        return searchKey != null;
     }
 
     @Override
     protected Resume getElement(Object searchKey) {
-        return storage.get(((Resume) searchKey).getUuid());
+        return (Resume) searchKey;
     }
 
     @Override
     protected void saveElement(Resume resume, Object searchKey) {
-        storage.put(((Resume) searchKey).getUuid(), resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
     protected Resume findSearchKey(String uuid, String fullName) {
-        Resume searchKey = new Resume(uuid, fullName);
-        return searchKey;
+        return storage.get(uuid);
     }
 
     @Override
@@ -43,10 +42,9 @@ public class MapStorageResume extends AbstractStorage {
         storage.clear();
     }
 
-    public List<Resume> getAllSorted() {
-        List<Resume> sortedListResume = new ArrayList<>(storage.values());
-        sortedListResume.sort(RESUME_COMPARATOR);
-        return sortedListResume;
+    public List<Resume> getListResume() {
+        List<Resume> list = new ArrayList<>(storage.values());
+        return list;
     }
 
     @Override
