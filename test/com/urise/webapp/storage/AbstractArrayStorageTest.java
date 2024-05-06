@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assume.assumeTrue;
 
@@ -75,13 +76,13 @@ public abstract class AbstractArrayStorageTest {
             storage.clear();
             try {
                 for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                    storage.save(new Resume());
+                    storage.save(new Resume(UUID.randomUUID().toString(), UUID.randomUUID().toString()));
                 }
 
             } catch (StorageException e) {
                 Assert.fail("The overflow occurred ahead of time");
             }
-            storage.save(new Resume());
+            storage.save(new Resume(UUID.randomUUID().toString(), UUID.randomUUID().toString()));
         } else {
             assumeTrue(false);
         }
