@@ -23,8 +23,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     public List<Resume> getListResume() {
         Resume[] arrayResume = Arrays.copyOf(storage, size);
-        List<Resume> list = new ArrayList<>(Arrays.asList(arrayResume));
-        return list;
+        return new ArrayList<>(Arrays.asList(arrayResume));
     }
 
     public int size() {
