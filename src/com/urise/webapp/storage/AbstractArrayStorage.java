@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    public boolean isExisting(Object searchKey) {
-        int index = (int) searchKey;
-        return index >= 0;
+    public boolean isExisting(Integer searchKey) {
+        return searchKey >= 0;
     }
 
     public void clear() {
@@ -31,15 +30,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
 
-    public Resume getElement(Object searchKey) {
-        int index = (int) searchKey;
-        return storage[index];
+    public Resume getElement(Integer searchKey) {
+        return storage[searchKey];
 
     }
 
-    public void updateElement(Resume resume, Object searchKey) {
-        int index = (int) searchKey;
-        storage[index] = resume;
+    public void updateElement(Resume resume, Integer searchKey) {
+        storage[searchKey] = resume;
     }
 
     protected void incrementSize() {

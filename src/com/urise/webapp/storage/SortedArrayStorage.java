@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveElement(Resume resume, Object searchKey) {
+    protected void saveElement(Resume resume, Integer searchKey) {
         int insertionPoint = -(int) searchKey - 1;
         if (size >= storage.length) {
             throw new StorageException("Storage overflow", resume.getUuid());
@@ -23,7 +23,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void deleteElement(Object searchKey) {
+    protected void deleteElement(Integer searchKey) {
         int index = (int) searchKey;
         if (index < size - 1) {
             System.arraycopy(storage, index + 1, storage, index, size - index - 1);
@@ -33,7 +33,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         }
     }
 
-    protected Object findSearchKey(String uuid, String fullName) {
+    protected Integer findSearchKey(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
         return Arrays.binarySearch(storage, 0, size, resume);
     }

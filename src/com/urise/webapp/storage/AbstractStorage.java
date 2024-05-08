@@ -7,13 +7,13 @@ import com.urise.webapp.model.Resume;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage {
 
     protected static final Comparator<Resume> RESUME_COMPARATOR =
             Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
 
     public final void update(Resume resume) {
-        Object searchKey = getExistingSearchKey(resume);
+        SK searchKey = getExistingSearchKey(resume);
         updateElement(resume, searchKey);
     }
 
@@ -32,8 +32,8 @@ public abstract class AbstractStorage implements Storage {
         return getElement(getExistingSearchKey(resume));
     }
 
-    private Object getExistingSearchKey(Resume resume) {
-        Object searchKey = findSearchKey(resume.getUuid(), resume.getFullName());
+    private SK getExistingSearchKey(Resume resume) {
+        SK searchKey = findSearchKey(resume.getUuid(), resume.getFullName());
         if (isExisting(searchKey)) {
             return searchKey;
         } else {
@@ -41,8 +41,8 @@ public abstract class AbstractStorage implements Storage {
         }
     }
 
-    private Object getNotExistingSearchKey(Resume resume) {
-        Object searchKey = findSearchKey(resume.getUuid(), resume.getFullName());
+    private SK getNotExistingSearchKey(Resume resume) {
+        SK searchKey = findSearchKey(resume.getUuid(), resume.getFullName());
         if (!isExisting(searchKey)) {
             return searchKey;
         } else {
@@ -58,16 +58,16 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract List<Resume> getListResume();
 
-    protected abstract boolean isExisting(Object searchKey);
+    protected abstract boolean isExisting(SK searchKey);
 
-    protected abstract Resume getElement(Object searchKey);
+    protected abstract Resume getElement(SK searchKey);
 
-    protected abstract void saveElement(Resume resume, Object searchKey);
+    protected abstract void saveElement(Resume resume, SK searchKey);
 
-    protected abstract Object findSearchKey(String uuid, String fullName);
+    protected abstract SK findSearchKey(String uuid, String fullName);
 
-    protected abstract void deleteElement(Object searchKey);
+    protected abstract void deleteElement(SK searchKey);
 
-    protected abstract void updateElement(Resume resume, Object searchKey);
+    protected abstract void updateElement(Resume resume, SK searchKey);
 
 }
