@@ -1,5 +1,6 @@
 package com.urise.webapp.model;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,6 +12,9 @@ public class Resume implements Comparable<Resume> {
     private final String uuid;
 
     private String fullName;
+
+    Map<SectionType, Section> sections;
+    Map<ContactType, String> contacts;
 
     public Resume() {
         this.uuid = UUID.randomUUID().toString();
@@ -27,12 +31,28 @@ public class Resume implements Comparable<Resume> {
         this.fullName = fullName;
     }
 
+    public Resume(String uuid, String fullName, Map<SectionType, Section> sections, Map<ContactType, String> contacts) {
+        this.uuid = uuid;
+        this.fullName = fullName;
+        this.sections = sections;
+        this.contacts = contacts;
+    }
+
+
     public String getUuid() {
         return uuid;
     }
 
     public String getFullName() {
         return fullName;
+    }
+
+    public Map<SectionType, Section> getSections() {
+        return sections;
+    }
+
+    public Map<ContactType, String> getContacts() {
+        return contacts;
     }
 
     public void setFullName(String fullName) {
