@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ListSection extends Section {
-    List<String> content;
+    private List<String> content;
 
     public ListSection(List<String> content) {
         this.content = content;

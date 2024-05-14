@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class Company {
-    String title;
-    String webSite;
-    List<Period> periods;
+    private String title;
+    private String webSite;
+    private List<Period> periods;
 
     public Company(String title, String webSite, List<Period> periods) {
         this.title = title;

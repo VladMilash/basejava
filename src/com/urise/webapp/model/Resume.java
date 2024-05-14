@@ -13,8 +13,8 @@ public class Resume implements Comparable<Resume> {
 
     private String fullName;
 
-    Map<SectionType, Section> sections;
-    Map<ContactType, String> contacts;
+    private Map<SectionType, Section> sections;
+    private Map<ContactType, String> contacts;
 
     public Resume() {
         this.uuid = UUID.randomUUID().toString();

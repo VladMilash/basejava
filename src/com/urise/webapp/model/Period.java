@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Period {
-    String title;
-    String description;
-    LocalDate startDate;
-    LocalDate endDate;
+    private String title;
+    private String description;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     public Period(String title, String description, LocalDate startDate, LocalDate endDate) {
         this.title = title;
