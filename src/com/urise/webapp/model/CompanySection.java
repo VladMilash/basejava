@@ -4,14 +4,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class CompanySection extends Section {
-    private List<Company> company;
+    private final List<Company> companys;
 
-    public CompanySection(List<Company> company) {
-        this.company = company;
+    public CompanySection(List<Company> companys) {
+        Objects.requireNonNull(companys, "company must not be null");
+        this.companys = companys;
     }
 
-    public List<Company> getCompany() {
-        return company;
+    public List<Company> getCompanys() {
+        return companys;
     }
 
     @Override
@@ -19,18 +20,18 @@ public class CompanySection extends Section {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CompanySection that = (CompanySection) o;
-        return Objects.equals(company, that.company);
+        return Objects.equals(companys, that.companys);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(company);
+        return Objects.hash(companys);
     }
 
     @Override
     public String toString() {
         return "CompanySection{" +
-                "company=" + company +
+                "company=" + companys +
                 '}';
     }
 }

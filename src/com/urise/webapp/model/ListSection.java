@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class ListSection extends Section {
-    private List<String> content;
+    private final List<String> content;
 
     public ListSection(List<String> content) {
+        Objects.requireNonNull(content, "content must not be null");
         this.content = content;
     }
 

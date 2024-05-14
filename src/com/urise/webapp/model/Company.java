@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Objects;
 
 public class Company {
-    private String title;
-    private String webSite;
-    private List<Period> periods;
+    private final String title;
+    private final String webSite;
+    private final List<Period> periods;
 
     public Company(String title, String webSite, List<Period> periods) {
+        Objects.requireNonNull(title, "title must not be null");
+        Objects.requireNonNull(webSite, "webSite must not be null");
+        Objects.requireNonNull(periods, "periods must not be null");
         this.title = title;
         this.webSite = webSite;
         this.periods = periods;
