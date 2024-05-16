@@ -7,6 +7,7 @@ public class Company {
     private final String title;
     private final String webSite;
     private final List<Period> periods;
+    private final List<Period> periodsSecond;
 
     public Company(String title, String webSite, List<Period> periods) {
         Objects.requireNonNull(title, "title must not be null");
@@ -15,6 +16,18 @@ public class Company {
         this.title = title;
         this.webSite = webSite;
         this.periods = periods;
+        this.periodsSecond = null;
+    }
+
+    public Company(String title, String webSite, List<Period> periods, List<Period> periodsSecond) {
+        Objects.requireNonNull(title, "title must not be null");
+        Objects.requireNonNull(webSite, "webSite must not be null");
+        Objects.requireNonNull(periods, "periods must not be null");
+        Objects.requireNonNull(periodsSecond, "periodsSecond must not be null");
+        this.title = title;
+        this.webSite = webSite;
+        this.periods = periods;
+        this.periodsSecond = periodsSecond;
     }
 
     public String getTitle() {
@@ -29,17 +42,21 @@ public class Company {
         return periods;
     }
 
+    public List<Period> getPeriodsSecond() {
+        return periodsSecond;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Company company = (Company) o;
-        return Objects.equals(title, company.title) && Objects.equals(webSite, company.webSite) && Objects.equals(periods, company.periods);
+        return Objects.equals(title, company.title) && Objects.equals(webSite, company.webSite) && Objects.equals(periods, company.periods) && Objects.equals(periodsSecond, company.periodsSecond);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, webSite, periods);
+        return Objects.hash(title, webSite, periods, periodsSecond);
     }
 
     @Override
@@ -48,6 +65,7 @@ public class Company {
                 "title='" + title + '\'' +
                 ", webSite='" + webSite + '\'' +
                 ", periods=" + periods +
+                ", periodsSecond=" + periodsSecond +
                 '}';
     }
 }
