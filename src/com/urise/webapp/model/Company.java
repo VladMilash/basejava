@@ -7,7 +7,7 @@ public class Company {
     private final String title;
     private final String webSite;
     private final List<Period> periods;
-    private final List<Period> periodsSecond;
+    private List<Period> periodsSecond;
 
     public Company(String title, String webSite, List<Period> periods) {
         Objects.requireNonNull(title, "title must not be null");
@@ -16,17 +16,11 @@ public class Company {
         this.title = title;
         this.webSite = webSite;
         this.periods = periods;
-        this.periodsSecond = null;
     }
 
     public Company(String title, String webSite, List<Period> periods, List<Period> periodsSecond) {
-        Objects.requireNonNull(title, "title must not be null");
-        Objects.requireNonNull(webSite, "webSite must not be null");
-        Objects.requireNonNull(periods, "periods must not be null");
+        this(title, webSite, periods);
         Objects.requireNonNull(periodsSecond, "periodsSecond must not be null");
-        this.title = title;
-        this.webSite = webSite;
-        this.periods = periods;
         this.periodsSecond = periodsSecond;
     }
 
