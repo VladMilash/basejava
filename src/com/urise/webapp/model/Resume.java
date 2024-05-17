@@ -52,6 +52,14 @@ public class Resume implements Comparable<Resume> {
         this.fullName = fullName;
     }
 
+    public void putSections (SectionType type, Section content) {
+        sections.put(type,content);
+    }
+
+    public void putContacts (ContactType type, String content) {
+        contacts.put(type,content);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,7 +73,6 @@ public class Resume implements Comparable<Resume> {
         return Objects.hash(uuid, fullName);
     }
 
-    // Unique identifier
     @Override
     public String toString() {
         return uuid + "(" + fullName + ")";
