@@ -23,7 +23,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
 
-    protected File[] getCheckedListFiles() {
+    protected File[] getCheckedListFiles() throws IOException {
         File[] files = directory.listFiles();
         if (files == null) {
             throw new StorageException("IO error", directory.getName());
@@ -78,7 +78,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    public void clear() {
+    public void clear() throws IOException {
         File[] files = directory.listFiles();
         if (files != null) {
             for (File value : files) {
@@ -91,7 +91,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        return getCheckedListFiles().length;
+        try {
+            return getCheckedListFiles().length;
+        } catch (IOException e) {
+            throw new StorageException("IO error", directory.getName(), e);
+        }
     }
 
     protected abstract void doWrite(Resume resume, File file) throws IOException;
