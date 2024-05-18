@@ -5,8 +5,6 @@ import com.urise.webapp.model.Resume;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
@@ -24,32 +22,14 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         this.directory = directory;
     }
 
-    @Override
-    protected List<Resume> getListResume() {
-        try {
-            return readAllDerectory(directory);
-        } catch (IOException e) {
-            throw new StorageException("IO error", directory.getName(), e);
-        }
-    }
 
-    private List<Resume> readAllDerectory(File file) throws IOException {
-        List<Resume> resumes = new ArrayList<>();
-        if (file != null) {
-            File[] files = file.listFiles();
-            for (File value : files) {
-                if (value.isDirectory()) {
-                    readAllDerectory(value);
-                } else {
-                    try {
-                        resumes.add(doRead(value));
-                    } catch (IOException e) {
-                        throw new StorageException("IO error", value.getName());
-                    }
-                }
-            }
+    protected File[] getCheckedListFiles() {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("IO error", directory.getName());
+        } else {
+            return files;
         }
-        return resumes;
     }
 
     @Override
@@ -83,7 +63,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void deleteElement(File file) {
-        file.delete();
+        if (!file.delete()) {
+            throw new StorageException("IO error", file.getName());
+        }
     }
 
     @Override
@@ -97,32 +79,19 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        try {
-            clearDirectory(directory);
-        } catch (IOException e) {
-            throw new StorageException("IO error", directory.getName(), e);
-        }
-    }
-
-    private void clearDirectory(File file) throws IOException {
-        if (file != null) {
-            File[] files = file.listFiles();
+        File[] files = directory.listFiles();
+        if (files != null) {
             for (File value : files) {
-                if (value.isDirectory()) {
-                    clearDirectory(value);
-                } else {
-                    if (!value.delete()) {
-                        throw new StorageException("IO error", value.getName());
-                    }
-                }
+                deleteElement(value);
             }
+        } else {
+            throw new StorageException("IO error", directory.getName());
         }
     }
 
     @Override
     public int size() {
-        File[] files = directory.listFiles();
-        return files.length;
+        return getCheckedListFiles().length;
     }
 
     protected abstract void doWrite(Resume resume, File file) throws IOException;
