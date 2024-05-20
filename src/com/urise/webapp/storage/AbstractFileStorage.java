@@ -5,6 +5,8 @@ import com.urise.webapp.model.Resume;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
@@ -20,16 +22,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
-    }
-
-
-    protected File[] getCheckedListFiles() throws IOException {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("IO error", directory.getName());
-        } else {
-            return files;
-        }
     }
 
     @Override
@@ -78,14 +70,12 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    public void clear() throws IOException {
+    public void clear() {
         File[] files = directory.listFiles();
         if (files != null) {
             for (File value : files) {
                 deleteElement(value);
             }
-        } else {
-            throw new StorageException("IO error", directory.getName());
         }
     }
 
@@ -95,6 +85,29 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             return getCheckedListFiles().length;
         } catch (IOException e) {
             throw new StorageException("IO error", directory.getName(), e);
+        }
+    }
+
+    @Override
+    protected List<Resume> getListResume() {
+        List<Resume> resumes = new ArrayList<>();
+        try {
+            File[] files = getCheckedListFiles();
+            for (File file : files) {
+                resumes.add(getElement(file));
+            }
+        } catch (IOException e) {
+            throw new StorageException("IO error", directory.getName(), e);
+        }
+        return resumes;
+    }
+
+    private File[] getCheckedListFiles() throws IOException {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("IO error", directory.getName());
+        } else {
+            return files;
         }
     }
 

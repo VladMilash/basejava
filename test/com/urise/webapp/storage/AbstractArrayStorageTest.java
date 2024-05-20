@@ -8,10 +8,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.urise.webapp.storage.ResumeTestData.createResume;
 import static org.junit.Assume.assumeTrue;
 
 public abstract class AbstractArrayStorageTest {
@@ -19,16 +21,16 @@ public abstract class AbstractArrayStorageTest {
 
     private static final String UUID_1 = "uuid1";
     private static final String NAME_1 = "name1";
-    private static final Resume RESUME_1 = ResumeTestData.createResume(UUID_1,NAME_1);
+    private static final Resume RESUME_1 = createResume(UUID_1,NAME_1);
     private static final String UUID_2 = "uuid2";
     private static final String NAME_2 = "name2";
-    private static final Resume RESUME_2 = ResumeTestData.createResume(UUID_2,NAME_2);
+    private static final Resume RESUME_2 = createResume(UUID_2,NAME_2);
     private static final String UUID_3 = "uuid3";
     private static final String NAME_3 = "name3";
-    private static final Resume RESUME_3 = ResumeTestData.createResume(UUID_3,NAME_3);
+    private static final Resume RESUME_3 = createResume(UUID_3,NAME_3);
     private static final String UUID_4 = "uuid4";
     private static final String NAME_4 = "name4";
-    private static final Resume RESUME_4 = ResumeTestData.createResume(UUID_4,NAME_4);
+    private static final Resume RESUME_4 = createResume(UUID_4,NAME_4);
 
     protected AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
@@ -44,7 +46,11 @@ public abstract class AbstractArrayStorageTest {
 
     @org.junit.Test
     public void clear() {
-        storage.clear();
+        try {
+            storage.clear();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         assertSize(0);
         List<Resume> expectedEmptyList = new ArrayList<>();
         Assert.assertEquals(expectedEmptyList, storage.getAllSorted());
@@ -73,7 +79,11 @@ public abstract class AbstractArrayStorageTest {
     @org.junit.Test(expected = StorageException.class)
     public void saveStorageOverflow() {
         if (storage instanceof AbstractArrayStorage) {
-            storage.clear();
+            try {
+                storage.clear();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             try {
                 for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
                     storage.save(new Resume(UUID.randomUUID().toString(), UUID.randomUUID().toString()));
