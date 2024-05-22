@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,10 @@ import static com.urise.webapp.storage.ResumeTestData.createResume;
 import static org.junit.Assume.assumeTrue;
 
 public abstract class AbstractArrayStorageTest {
+
+    protected static final File STORAGE_DIR = new File
+            ("C:\\Users\\Матвей\\Documents\\java\\basejava\\src\\com\\urise\\webapp\\files");
+
     private final Storage storage;
 
     private static final String UUID_1 = "uuid1";
