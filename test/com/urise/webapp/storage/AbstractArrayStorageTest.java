@@ -20,7 +20,8 @@ import static org.junit.Assume.assumeTrue;
 public abstract class AbstractArrayStorageTest {
 
     protected static final File STORAGE_DIR = new File
-            ("C:\\Users\\Матвей\\Documents\\java\\basejava\\src\\com\\urise\\webapp\\files");
+            ("C:\\Users\\Матвей\\Documents\\java\\basejava" +
+                    "\\test\\com\\urise\\webapp\\storage\\FilesTestStorage");
 
     private final Storage storage;
 
@@ -65,7 +66,8 @@ public abstract class AbstractArrayStorageTest {
     public void update() {
         Resume updated = RESUME_1;
         storage.update(updated);
-        Assert.assertSame(updated, storage.get(UUID_1, NAME_1));
+        Assert.assertEquals(updated, storage.get(UUID_1, NAME_1));
+
     }
 
     @org.junit.Test(expected = NotExistStorageException.class)
