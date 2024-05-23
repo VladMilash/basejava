@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -43,7 +42,7 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         storage.clear();
         storage.save(RESUME_1);
         storage.save(RESUME_2);
@@ -52,11 +51,7 @@ public abstract class AbstractArrayStorageTest {
 
     @org.junit.Test
     public void clear() {
-        try {
-            storage.clear();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        storage.clear();
         assertSize(0);
         List<Resume> expectedEmptyList = new ArrayList<>();
         Assert.assertEquals(expectedEmptyList, storage.getAllSorted());
@@ -86,11 +81,7 @@ public abstract class AbstractArrayStorageTest {
     @org.junit.Test(expected = StorageException.class)
     public void saveStorageOverflow() {
         if (storage instanceof AbstractArrayStorage) {
-            try {
-                storage.clear();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            storage.clear();
             try {
                 for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
                     storage.save(new Resume(UUID.randomUUID().toString(), UUID.randomUUID().toString()));
