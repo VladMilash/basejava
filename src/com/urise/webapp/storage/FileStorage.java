@@ -2,6 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.Serialization.SerializationStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -43,10 +44,10 @@ public class FileStorage extends AbstractStorage<File> {
     protected void saveElement(Resume resume, File file) {
         try {
             file.createNewFile();
-            serializationStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("Couldn't create file ", file.getAbsolutePath(), e);
         }
+        updateElement(resume, file);
     }
 
     @Override
@@ -72,11 +73,13 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        File[] files = directory.listFiles();
-        if (files != null) {
+        try {
+            File[] files = getCheckedListFiles();
             for (File value : files) {
                 deleteElement(value);
             }
+        } catch (IOException e) {
+            throw new StorageException("IO error", directory.getName(), e);
         }
     }
 
@@ -91,25 +94,25 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> getListResume() {
-        List<Resume> resumes = new ArrayList<>();
         try {
+            List<Resume> resumes = new ArrayList<>();
             File[] files = getCheckedListFiles();
             for (File file : files) {
                 resumes.add(getElement(file));
             }
+            return resumes;
         } catch (IOException e) {
             throw new StorageException("Directory read error ", directory.getName(), e);
         }
-        return resumes;
+
     }
 
     private File[] getCheckedListFiles() throws IOException {
         File[] files = directory.listFiles();
         if (files == null) {
             throw new StorageException("Directory read error ", directory.getName());
-        } else {
-            return files;
         }
+        return files;
     }
 
 }

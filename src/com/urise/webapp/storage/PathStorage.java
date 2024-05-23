@@ -2,15 +2,16 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.Serialization.SerializationStrategy;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
@@ -29,21 +30,17 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> getListResume() {
-        List<Resume> resumes = new ArrayList<>();
-        try {
-            Path[] paths = getCheckedListFiles();
-            for (Path path : paths) {
-                resumes.add(getElement(path));
-            }
+        try (Stream<Path> paths = getCheckedListFiles()) {
+            return paths.map(this::getElement)
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             throw new StorageException("Directory read error ", directory.toString(), e);
         }
-        return resumes;
     }
 
-    private Path[] getCheckedListFiles() throws IOException {
-        try (Stream<Path> paths = Files.list(directory)) {
-            return paths.filter(Files::isRegularFile).toArray(Path[]::new);
+    private Stream<Path> getCheckedListFiles() throws IOException {
+        try {
+            return Files.list(directory);
         } catch (IOException e) {
             throw new StorageException("Directory read error ", directory.toString(), e);
         }
@@ -67,12 +64,10 @@ public class PathStorage extends AbstractStorage<Path> {
     protected void saveElement(Resume resume, Path path) {
         try {
             Files.createFile(path);
-            try (OutputStream os = Files.newOutputStream(path)) {
-                serializationStrategy.doWrite(resume, os);
-            }
         } catch (IOException e) {
             throw new StorageException("Couldn't create file ", path.toString(), e);
         }
+        updateElement(resume, path);
     }
 
     @Override
@@ -99,8 +94,8 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::deleteElement);
+        try (Stream<Path> paths = getCheckedListFiles()) {
+            paths.forEach(this::deleteElement);
         } catch (IOException e) {
             throw new StorageException("Path delete error", null);
         }
@@ -109,7 +104,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     public int size() {
         try {
-            return getCheckedListFiles().length;
+            return (int) getCheckedListFiles().count();
         } catch (IOException e) {
             throw new StorageException("IO error", directory.toString(), e);
         }
