@@ -5,7 +5,7 @@ import com.urise.webapp.model.Resume;
 
 import java.io.*;
 
-public class SpecificSerializationStrategy implements SerializationStrategy {
+public class ObjectStreamSerializationStrategy implements SerializationStrategy {
     public void doWrite(Resume resume, OutputStream os) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
             oos.writeObject(resume);
