@@ -42,7 +42,7 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Before
-    public void setUp()  {
+    public void setUp() {
         storage.clear();
         storage.save(RESUME_1);
         storage.save(RESUME_2);
