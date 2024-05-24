@@ -1,6 +1,6 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.storage.Serialization.ObjectStreamSerializationStrategy;
+import com.urise.webapp.storage.serialization.ObjectStreamSerializationStrategy;
 
 public class PathStorageTest extends AbstractArrayStorageTest{
     public PathStorageTest() {
