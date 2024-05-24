@@ -1,5 +1,8 @@
 package com.urise.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.EnumMap;
@@ -7,23 +10,23 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Initial resume class
- */
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
 
     @Serial
-    private static final long serialversionUID= 1L;
+    private static final long serialversionUID = 1L;
 
-    private final String uuid;
+    private String uuid;
 
     private String fullName;
 
     private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
     private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
 
+
     public Resume() {
-        this.uuid = UUID.randomUUID().toString();
     }
 
     public Resume(String fullName) {
@@ -57,12 +60,12 @@ public class Resume implements Comparable<Resume>, Serializable {
         this.fullName = fullName;
     }
 
-    public void putSections (SectionType type, Section content) {
-        sections.put(type,content);
+    public void putSections(SectionType type, Section content) {
+        sections.put(type, content);
     }
 
-    public void putContacts (ContactType type, String content) {
-        contacts.put(type,content);
+    public void putContacts(ContactType type, String content) {
+        contacts.put(type, content);
     }
 
     @Override
@@ -70,12 +73,13 @@ public class Resume implements Comparable<Resume>, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return Objects.equals(uuid, resume.uuid) && Objects.equals(fullName, resume.fullName);
+        return Objects.equals(uuid, resume.uuid) && Objects.equals(fullName, resume.fullName)
+                && Objects.equals(sections, resume.sections) && Objects.equals(contacts, resume.contacts);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName);
+        return Objects.hash(uuid, fullName, sections, contacts);
     }
 
     @Override
