@@ -20,7 +20,7 @@ public class CompanySection extends Section {
         this.companys = companys;
     }
 
-    public List<Company> getCompanys() {
+    public List<Company> getCompanies() {
         return companys;
     }
 
