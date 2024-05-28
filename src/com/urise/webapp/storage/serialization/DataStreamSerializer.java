@@ -5,6 +5,7 @@ import com.urise.webapp.model.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -17,13 +18,13 @@ public class DataStreamSerializer implements SerializationStrategy {
             dos.writeUTF(resume.getFullName());
             Map<ContactType, String> contacts = resume.getContacts();
             dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            writeWithExeption(contacts.entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }
+            });
             Map<SectionType, Section> sections = resume.getSections();
             dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
+            writeWithExeption(sections.entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
                 switch (entry.getKey()) {
                     case PERSONAL, OBJECTIVE -> {
@@ -34,29 +35,27 @@ public class DataStreamSerializer implements SerializationStrategy {
                         ListSection listSection = (ListSection) entry.getValue();
                         List<String> contents = listSection.getContent();
                         dos.writeInt(contents.size());
-                        for (String content : contents) {
-                            dos.writeUTF(content);
-                        }
+                        writeWithExeption(contents, dos, dos::writeUTF);
                     }
                     case EDUCATION, EXPERIENCE -> {
                         CompanySection companySection = (CompanySection) entry.getValue();
                         List<Company> companies = companySection.getCompanies();
                         dos.writeInt(companies.size());
-                        for (Company company : companies) {
+                        writeWithExeption(companies, dos, company -> {
                             dos.writeUTF(company.getTitle());
-                            dos.writeUTF(company.getWebSite() != null ? company.getWebSite():"");
+                            dos.writeUTF(company.getWebSite() != null ? company.getWebSite() : "");
                             List<Period> periods = company.getPeriods();
                             dos.writeInt(periods.size());
-                            for (Period period : periods) {
+                            writeWithExeption(periods, dos, period -> {
                                 dos.writeUTF(period.getTitle());
-                                dos.writeUTF(period.getDescription() != null ? period.getDescription(): "");
+                                dos.writeUTF(period.getDescription() != null ? period.getDescription() : "");
                                 dos.writeUTF(period.getStartDate().toString());
                                 dos.writeUTF(period.getEndDate().toString());
-                            }
-                        }
+                            });
+                        });
                     }
                 }
-            }
+            });
         }
     }
 
@@ -115,5 +114,16 @@ public class DataStreamSerializer implements SerializationStrategy {
             return resume;
         }
 
+    }
+
+    @FunctionalInterface
+    public interface ThrowingConsumer<T> {
+        void accept(T t) throws IOException;
+    }
+
+    public static <T> void writeWithExeption(Collection<T> collection, DataOutputStream dos, ThrowingConsumer<T> consumer) throws IOException {
+        for (T item : collection) {
+            consumer.accept(item);
+        }
     }
 }
