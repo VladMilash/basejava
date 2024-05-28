@@ -19,7 +19,6 @@ public class Company implements Serializable {
 
     public Company(String title, String webSite, List<Period> periods) {
         Objects.requireNonNull(title, "title must not be null");
-        Objects.requireNonNull(webSite, "webSite must not be null");
         Objects.requireNonNull(periods, "periods must not be null");
         this.title = title;
         this.webSite = webSite;

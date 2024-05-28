@@ -44,12 +44,12 @@ public class DataStreamSerializer implements SerializationStrategy {
                         dos.writeInt(companies.size());
                         for (Company company : companies) {
                             dos.writeUTF(company.getTitle());
-                            dos.writeUTF(company.getWebSite());
+                            dos.writeUTF(company.getWebSite() != null ? company.getWebSite():"");
                             List<Period> periods = company.getPeriods();
                             dos.writeInt(periods.size());
                             for (Period period : periods) {
                                 dos.writeUTF(period.getTitle());
-                                dos.writeUTF(period.getDescription());
+                                dos.writeUTF(period.getDescription() != null ? period.getDescription(): "");
                                 dos.writeUTF(period.getStartDate().toString());
                                 dos.writeUTF(period.getEndDate().toString());
                             }
@@ -94,11 +94,13 @@ public class DataStreamSerializer implements SerializationStrategy {
                         for (int j = 0; j < sizeCompanies; j++) {
                             String title = dis.readUTF();
                             String webSite = dis.readUTF();
+                            webSite = webSite.isEmpty() ? null : webSite;
                             int sizePeriods = dis.readInt();
                             List<Period> periods = new ArrayList<>();
                             for (int k = 0; k < sizePeriods; k++) {
                                 String titlePeriod = dis.readUTF();
                                 String description = dis.readUTF();
+                                description = description.isEmpty() ? null : description;
                                 LocalDate startDate = LocalDate.parse(dis.readUTF());
                                 LocalDate endDate = LocalDate.parse(dis.readUTF());
                                 periods.add(new Period(titlePeriod, description, startDate, endDate));
@@ -108,9 +110,7 @@ public class DataStreamSerializer implements SerializationStrategy {
                         section = new CompanySection(companies);
                     }
                 }
-                if (section != null) {
-                    resume.putSections(sectionType, section);
-                }
+                resume.putSections(sectionType, section);
             }
             return resume;
         }
