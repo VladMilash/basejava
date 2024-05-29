@@ -17,13 +17,11 @@ public class DataStreamSerializer implements SerializationStrategy {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
             Map<ContactType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
             writeWithExeption(contacts.entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             });
             Map<SectionType, Section> sections = resume.getSections();
-            dos.writeInt(sections.size());
             writeWithExeption(sections.entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
                 switch (entry.getKey()) {
@@ -34,18 +32,15 @@ public class DataStreamSerializer implements SerializationStrategy {
                     case ARCHIEVEMENT, QUALIFICATIONS -> {
                         ListSection listSection = (ListSection) entry.getValue();
                         List<String> contents = listSection.getContent();
-                        dos.writeInt(contents.size());
                         writeWithExeption(contents, dos, dos::writeUTF);
                     }
                     case EDUCATION, EXPERIENCE -> {
                         CompanySection companySection = (CompanySection) entry.getValue();
                         List<Company> companies = companySection.getCompanies();
-                        dos.writeInt(companies.size());
                         writeWithExeption(companies, dos, company -> {
                             dos.writeUTF(company.getTitle());
                             dos.writeUTF(company.getWebSite() != null ? company.getWebSite() : "");
                             List<Period> periods = company.getPeriods();
-                            dos.writeInt(periods.size());
                             writeWithExeption(periods, dos, period -> {
                                 dos.writeUTF(period.getTitle());
                                 dos.writeUTF(period.getDescription() != null ? period.getDescription() : "");
@@ -122,6 +117,7 @@ public class DataStreamSerializer implements SerializationStrategy {
     }
 
     public static <T> void writeWithExeption(Collection<T> collection, DataOutputStream dos, ThrowingConsumer<T> consumer) throws IOException {
+        dos.writeInt(collection.size());
         for (T item : collection) {
             consumer.accept(item);
         }
