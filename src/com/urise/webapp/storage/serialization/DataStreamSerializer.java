@@ -74,33 +74,24 @@ public class DataStreamSerializer implements SerializationStrategy {
                         section = new TextSection(content);
                     }
                     case ARCHIEVEMENT, QUALIFICATIONS -> {
-                        int sizeContent = dis.readInt();
-                        List<String> content = new ArrayList<>();
-                        for (int j = 0; j < sizeContent; j++) {
-                            content.add(dis.readUTF());
-                        }
+                        List<String> content = readWithExeption(dis, DataInput::readUTF);
                         section = new ListSection(content);
-
                     }
                     case EDUCATION, EXPERIENCE -> {
-                        int sizeCompanies = dis.readInt();
-                        List<Company> companies = new ArrayList<>();
-                        for (int j = 0; j < sizeCompanies; j++) {
+                        List<Company> companies = readWithExeption(dis, dataInputStream -> {
                             String title = dis.readUTF();
                             String webSite = dis.readUTF();
                             webSite = webSite.isEmpty() ? null : webSite;
-                            int sizePeriods = dis.readInt();
-                            List<Period> periods = new ArrayList<>();
-                            for (int k = 0; k < sizePeriods; k++) {
+                            List<Period> periods = readWithExeption(dis, dataInputStream1 -> {
                                 String titlePeriod = dis.readUTF();
                                 String description = dis.readUTF();
                                 description = description.isEmpty() ? null : description;
                                 LocalDate startDate = LocalDate.parse(dis.readUTF());
                                 LocalDate endDate = LocalDate.parse(dis.readUTF());
-                                periods.add(new Period(titlePeriod, description, startDate, endDate));
-                            }
-                            companies.add(new Company(title, webSite, periods));
-                        }
+                                return new Period(titlePeriod, description, startDate, endDate);
+                            });
+                            return new Company(title, webSite, periods);
+                        });
                         section = new CompanySection(companies);
                     }
                 }
@@ -116,10 +107,24 @@ public class DataStreamSerializer implements SerializationStrategy {
         void accept(T t) throws IOException;
     }
 
+    @FunctionalInterface
+    public interface ThrowingFunction<T, R> {
+        R accept(T t) throws IOException;
+    }
+
     public static <T> void writeWithExeption(Collection<T> collection, DataOutputStream dos, ThrowingConsumer<T> consumer) throws IOException {
         dos.writeInt(collection.size());
         for (T item : collection) {
             consumer.accept(item);
         }
+    }
+
+    public static <T> List<T> readWithExeption(DataInputStream dis, ThrowingFunction<DataInputStream, T> function) throws IOException {
+        int size = dis.readInt();
+        List<T> list = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            list.add(function.accept(dis));
+        }
+        return list;
     }
 }
