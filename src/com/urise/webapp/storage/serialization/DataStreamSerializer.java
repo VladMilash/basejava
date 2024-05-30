@@ -60,12 +60,9 @@ public class DataStreamSerializer implements SerializationStrategy {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int sizeContacts = dis.readInt();
-            for (int i = 0; i < sizeContacts; i++) {
-                resume.putContacts(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
-            int sizeSections = dis.readInt();
-            for (int i = 0; i < sizeSections; i++) {
+            readMapWithException(dis, (dataInputStream) ->
+                    resume.putContacts(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readMapWithException(dis, dataInputStream -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 Section section = null;
                 switch (sectionType) {
@@ -74,15 +71,15 @@ public class DataStreamSerializer implements SerializationStrategy {
                         section = new TextSection(content);
                     }
                     case ARCHIEVEMENT, QUALIFICATIONS -> {
-                        List<String> content = readWithExeption(dis, DataInput::readUTF);
+                        List<String> content = readListWithException(dis, DataInput::readUTF);
                         section = new ListSection(content);
                     }
                     case EDUCATION, EXPERIENCE -> {
-                        List<Company> companies = readWithExeption(dis, dataInputStream -> {
+                        List<Company> companies = readListWithException(dis, companyInputStream -> {
                             String title = dis.readUTF();
                             String webSite = dis.readUTF();
                             webSite = webSite.isEmpty() ? null : webSite;
-                            List<Period> periods = readWithExeption(dis, dataInputStream1 -> {
+                            List<Period> periods = readListWithException(dis, periodInputStream -> {
                                 String titlePeriod = dis.readUTF();
                                 String description = dis.readUTF();
                                 description = description.isEmpty() ? null : description;
@@ -96,7 +93,7 @@ public class DataStreamSerializer implements SerializationStrategy {
                     }
                 }
                 resume.putSections(sectionType, section);
-            }
+            });
             return resume;
         }
 
@@ -119,7 +116,7 @@ public class DataStreamSerializer implements SerializationStrategy {
         }
     }
 
-    public static <T> List<T> readWithExeption(DataInputStream dis, ThrowingFunction<DataInputStream, T> function) throws IOException {
+    public static <T> List<T> readListWithException(DataInputStream dis, ThrowingFunction<DataInputStream, T> function) throws IOException {
         int size = dis.readInt();
         List<T> list = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
@@ -127,4 +124,13 @@ public class DataStreamSerializer implements SerializationStrategy {
         }
         return list;
     }
+
+
+    public static void readMapWithException(DataInputStream dis, ThrowingConsumer<DataInputStream> consumer) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            consumer.accept(dis);
+        }
+    }
+
 }
