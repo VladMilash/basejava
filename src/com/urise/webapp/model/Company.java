@@ -1,20 +1,24 @@
 package com.urise.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Company implements Serializable {
     @Serial
-    private static final long serialversionUID= 1L;
-    private final String title;
-    private final String webSite;
-    private final List<Period> periods;
+    private static final long serialversionUID = 1L;
+    private String title;
+    private String webSite;
+    private List<Period> periods;
+
+    public Company() {
+    }
 
     public Company(String title, String webSite, List<Period> periods) {
         Objects.requireNonNull(title, "title must not be null");
-        Objects.requireNonNull(webSite, "webSite must not be null");
         Objects.requireNonNull(periods, "periods must not be null");
         this.title = title;
         this.webSite = webSite;

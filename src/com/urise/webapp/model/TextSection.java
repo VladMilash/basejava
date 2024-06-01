@@ -1,12 +1,17 @@
 package com.urise.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serial;
 import java.util.Objects;
-
+@XmlAccessorType(XmlAccessType.FIELD)
 public class TextSection extends Section {
     @Serial
-    private static final long serialversionUID= 1L;
-    private final String content;
+    private static final long serialversionUID = 1L;
+    private String content;
+
+    public TextSection() {
+    }
 
     public TextSection(String content) {
         Objects.requireNonNull(content, "content must not be null");

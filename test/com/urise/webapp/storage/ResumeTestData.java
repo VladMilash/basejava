@@ -22,7 +22,7 @@ public class ResumeTestData {
         resume.putContacts(SITE, "SiteExample");
 
         resume.putSections(PERSONAL, new TextSection("Личные качества для резюме"));
-        resume.putSections(OBJECTIVE, new TextSection("Позция для резюме"));
+        resume.putSections(OBJECTIVE, new TextSection("Позиция для резюме"));
         resume.putSections(ARCHIEVEMENT, new ListSection(List.of("Достижение1, достижение2")));
         resume.putSections(QUALIFICATIONS, new ListSection(List.of("Квалификация1, квалификация2")));
 
