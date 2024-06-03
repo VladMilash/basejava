@@ -10,8 +10,7 @@ public class StreamDemo {
         System.out.println(minValue(values));
 
         List<Integer> integers = Arrays.asList(1, 1, 1, 2, 2);
-        List<Integer> result = oddOrEven(integers);
-        System.out.println(result);
+        System.out.println(oddOrEven(integers));
     }
 
         public static int minValue(int[] values) {
