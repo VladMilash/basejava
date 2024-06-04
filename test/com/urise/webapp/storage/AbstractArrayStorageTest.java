@@ -21,6 +21,7 @@ public abstract class AbstractArrayStorageTest {
     protected static final File STORAGE_DIR = new File
             ("C:\\Users\\Матвей\\Documents\\java\\basejava" +
                     "\\test\\com\\urise\\webapp\\storage\\FilesTestStorage");
+//    protected static final File STORAGE_DIR = Config.get().getStorageDir();
 
     private final Storage storage;
 
