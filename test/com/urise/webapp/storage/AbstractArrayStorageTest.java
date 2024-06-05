@@ -1,5 +1,6 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.Config;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
@@ -18,10 +19,10 @@ import static org.junit.Assume.assumeTrue;
 
 public abstract class AbstractArrayStorageTest {
 
-    protected static final File STORAGE_DIR = new File
-            ("C:\\Users\\Матвей\\Documents\\java\\basejava" +
-                    "\\test\\com\\urise\\webapp\\storage\\FilesTestStorage");
-//    protected static final File STORAGE_DIR = Config.get().getStorageDir();
+//    protected static final File STORAGE_DIR = new File
+//            ("C:\\Users\\Матвей\\Documents\\java\\basejava" +
+//                    "\\test\\com\\urise\\webapp\\storage\\FilesTestStorage");
+    protected static final File STORAGE_DIR = Config.get().getStorageDir();
 
     private final Storage storage;
 
