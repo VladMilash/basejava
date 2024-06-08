@@ -25,4 +25,22 @@ public class SqlHelper {
             throw new StorageException(e);
         }
     }
+
+    public <T> T transactionalExecute(SqlTransaction<T> executor) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                T res = executor.execute(conn);
+                conn.commit();
+                return res;
+            } catch (SQLException e) {
+                if (e.getSQLState().equals("23505")) {
+                    throw new ExistStorageException(null);
+                }
+                throw new StorageException(e);
+            }
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        }
+    }
 }
